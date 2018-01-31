@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var orderDone = require('./app/controllers/kitchenController').orderDone;
+var port = process.env.PORT || 3009;
 
 require('./lib/database');
 
@@ -42,7 +43,7 @@ require('./lib/oauth').configure(app).registerErrorHandler();
 require('./app/routes/kitchenRoute.js')(app, io);
 
 // listen for resquests
-server.listen(3009, function () {
+server.listen(port, function () {
   console.log('server is running on port 3009');
 });
 
