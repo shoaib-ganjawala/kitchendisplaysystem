@@ -36,7 +36,9 @@
 			</td>
 		</tr>
 	</table>
-	<h3>Sample Report <button type="button" ng-click="report()">Generate Report</button></h3>
+	<h3>Sample Report
+		<button type="button" ng-click="report()">Generate Report</button>
+	</h3>
 	
 	<table>
 		<tr>
@@ -60,7 +62,7 @@
 	var app = angular.module('myApp', []);
 	app.controller('customersCtrl', function ($scope, $http) {
 		$http({
-			url: 'http://localhost:3009/getKitchenData',
+			url: 'https://kitchendisplaysystem.herokuapp.com/getKitchenData',
 			method: 'GET'
 		}).then(function (res) {
 			$scope.kitchens = res.data.data[0].order.filter(function (p1, p2, p3) {
@@ -74,10 +76,10 @@
 				}
 			});
 		});
-		
+		//	url: 'https://kitchendisplaysystem.herokuapp.com/getKitchenData',
 		$scope.report = function () {
 			$http({
-				url: 'http://localhost:3009/getKitchenData',
+				url: 'https://kitchendisplaysystem.herokuapp.com/getKitchenData',
 				method: 'GET'
 			}).then(function (res) {
 				var result = res.data.data[0].order.filter(function (p1) {
@@ -91,39 +93,19 @@
 					}
 				});
 				
-				var unique_array = removeDuplicates(result, '_id');
-//				for(var i = 0;i < result.length; i++){
-//				result.forEach(function (data, index) {
-//					if(unique_array.filter(function(e){
-//						e.product._id == data.product._id
-//					}).length > 0)
-//					{
-//						console.log('result 111 >>>>>>> ', data)
-//
-//					}
-//					 else {
-//						unique_array.push(data)
-//						console.log('result >>>>>>> ', data)
-//					}
-////					if(data.product._id == unique_array[index].product._id)
-////						unique_array.push(result[i])
-////					if(unique_array.indexOf(result[i].product._id) == -1){
-//
-////					}
-//				})
+				var obj = {};
 				
-//				}
-//				return unique_array
-				$scope.kitchensRPT = unique_array;
+				for ( var i=0, len=result.length; i < len; i++ )
+					obj[result[i]['place']] = result[i];
+				
+				result = new Array();
+				for ( var key in obj )
+					result.push(obj[key]);
+				
+				
+				$scope.kitchensRPT = result;
 			});
 		};
-		
-		function removeDuplicates(myArr, prop) {
-			return myArr.filter(function(obj, pos, arr) {
-
-//					return arr.map(function(mapObj){ mapObj[prop].indexOf(obj.product[prop]) === pos});
-			});
-		}
 		
 		$scope.orderDone = function (id) {
 			socket.emit('status added', id);
