@@ -1,0 +1,45 @@
+{
+  "name": "Decentralized-Lending-Platform-App",
+  "version": "1.0.0",
+  "description": "Decentralized-Lending-Platform-App.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js",
+    "mock": "mock"
+  },
+  "engines": {
+    "node": "7.10.1"
+  },
+  "keywords": [
+    "Express",
+    "RestAPI",
+    "MongoDB",
+    "Mongoose",
+    "Notes"
+  ],
+  "author": "shoaib.ganja@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "crypto": "^1.0.1",
+    "email-templates": "^2.4.0",
+    "express": "^4.16.2",
+    "handlebars": "^4.0.11",
+    "jsonwebtoken": "^5.0.2",
+    "lodash": "^4.17.4",
+    "mongoose": "^4.13.9",
+    "nodemailer": "^4.4.1",
+    "nodemailer-pepipost-transport": "^0.4.0",
+    "nodemailer-sendgrid-transport": "^0.2.0",
+    "nodemailer-smtp-transport": "^2.7.4",
+    "oauth2-server": "^2.4.0",
+    "qrcode": "^1.2.0",
+    "socket.io": "^2.0.4",
+    "speakeasy": "^2.0.0"
+  },
+  "devDependencies": {
+    "api-blueprint": "^0.1.8",
+    "nodemon": "^1.14.11"
+  }
+}
