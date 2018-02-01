@@ -76,7 +76,7 @@
 				}
 			});
 		});
-		//	url: 'https://kitchendisplaysystem.herokuapp.com/getKitchenData',
+		//	url: 'http://localhost:3009/getKitchenData',
 		$scope.report = function () {
 			$http({
 				url: 'https://kitchendisplaysystem.herokuapp.com/getKitchenData',
@@ -96,7 +96,7 @@
 				var obj = {};
 				
 				for ( var i=0, len=result.length; i < len; i++ )
-					obj[result[i]['place']] = result[i];
+					obj[result[i].product['_id']] = result[i];
 				
 				result = new Array();
 				for ( var key in obj )
