@@ -83,7 +83,7 @@
 				method: 'GET'
 			}).then(function (res) {
 				var result = res.data.data[0].order.filter(function (p1) {
-					if (p1.status != 1) {
+					if (p1.status == 1) {
 						p1.produced = 0;
 						return res.data.data[0].order.filter(function (data, index, self) {
 							if (data.status == 1 && data.product._id == p1.product._id) {
