@@ -38,16 +38,68 @@ exports.doPrediction = function (req, res) {
 		res.status(400).send({message: "kitchen can not be empty."});
 	}
 	
+	var start = new Date();
+	start.setHours(0, 0, 0, 0);
+	var end = new Date();
+	end.setHours(23, 59, 59, 999);
+	
 	var predictionSchema = new kitchen({
 		product: req.body.product,
 		predictionForDate: req.body.predictionForDate
 	});
 	
-	predictionSchema.save(function (err, data) {
-		if (err) {
-			res.status(500).send({message: "Some error occured while creating."})
+	kitchen.find({"predictionForDate": {$gte: start, $lt: end}}, function (e, kitchenData) {
+		if (e) {
+			return;
+		}
+		if (!!kitchenData[0]) {
+			kitchenData[0].product = req.body.product;
+			var rowOrder = kitchenData[0].order;
+			kitchenData[0].order = [];
+			
+			_.forEach(rowOrder, function (data) {
+				var orderSchema = new order({
+					product: {
+						_id: data.product._id,
+						productName: data.product.productName,
+						producedQuantity: data.product.producedQuantity,
+						predictedQuantity: _.find(req.body.product, function (obj) {
+							return obj._id == data.product._id;
+						}).predictedQuantity
+					},
+					quantity: data.quantity,
+					status: data.status
+				});
+				kitchenData[0].order.push(orderSchema);
+			});
+			
+			kitchenData[0].save(function (err, data) {
+				if (err) {
+					res.status(500).send({message: "Some error occured while creating."})
+				} else {
+					res.send(data);
+				}
+			})
 		} else {
-			res.send({success: true, data: [data]});
+			predictionSchema.save(function (err, data) {
+				if (err) {
+					res.status(500).send({message: "Some error occured while creating."})
+				} else {
+					res.send({success: true, data: [data]});
+				}
+			})
+		}
+	});
+};
+
+
+exports.getProduct = function (req, res) {
+	product.find({}, function (e, kitchenData) {
+		if (e) {
+			return;
+		}
+		if (!!kitchenData) {
+			res.status(200).send(kitchenData);
 		}
 	})
 };
@@ -68,7 +120,6 @@ exports.placeOrder = function (req, res, io) {
 			return;
 		}
 		if (!!kitchenData[0]) {
-			// console.log('delete_id >>>>>>>>> ', delete_id)
 			var orderSchema = new order({
 				product: {
 					_id: req.body._id,
@@ -82,7 +133,6 @@ exports.placeOrder = function (req, res, io) {
 			});
 			
 			kitchenData[0].order.push(orderSchema);
-			console.log('kitchenData[0].order >>>>>>>> ', kitchenData[0].order)
 			kitchenData[0].save(function (err, data) {
 				if (err) {
 					res.status(500).send({message: "Some error occured while creating."})
@@ -138,16 +188,7 @@ exports.orderDone = function (id, cb) {
 				return o._id == id;
 			})[0];
 			
-			// var done = _.filter(kitchenData[0].order, function (o) {
-			// 	return o.status == 0 && o.product._id == withObj.product._id;
-			// }).reduce(function(prevVal, elem) {
-			// 	// console.log('prevVal, elem >>>>>> ', prevVal, elem)
-			// 	return prevVal + elem.quantity;
-			// }, 0);
-			
-			
 			kitchenData[0].order = withOutArray;
-			
 			var orderSchema = new order({
 				product: {
 					_id: withObj.product._id,
@@ -157,13 +198,6 @@ exports.orderDone = function (id, cb) {
 				quantity: withObj.quantity,
 				status: 1
 			});
-			
-			/*var resu = _.filter(kitchenData[0].order, function (o) {
-				// console.log(o.product._id, withObj.product._id, o.product._id == withObj.product._id)
-				return o.status == 1 && o.product._id != withObj.product._id;
-			})*/
-			
-			// console.log('resu >>>>>>> ', resu);
 			
 			kitchenData[0].order.push(orderSchema);
 			kitchenData[0].save(function (err, data) {

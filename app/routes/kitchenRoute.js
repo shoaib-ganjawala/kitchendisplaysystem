@@ -6,11 +6,13 @@ module.exports = function (app, io) {
 	
 	var kitchen = require('../controllers/kitchenController');
 	
-	app.get("/",function(req,res){
+	app.get("/", function (req, res) {
 		res.sendFile(__dirname + '/kitchen.html');
 	});
 	
-	app.post('/product/create',  kitchen.createProduct);
+	app.post('/product/create', kitchen.createProduct);
+	
+	app.get('/getProduct', kitchen.getProduct);
 	
 	app.post('/doPrediction', kitchen.doPrediction);
 	
@@ -19,5 +21,5 @@ module.exports = function (app, io) {
 	});
 	
 	app.get('/getKitchenData', kitchen.getKitchenData)
-
+	
 };
