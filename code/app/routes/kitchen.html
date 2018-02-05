@@ -81,7 +81,7 @@
 	app.controller('customersCtrl', function ($scope, $http) {
 		
 		$scope.quantity = 1;
-		const apiURI = "http://localhost:3009";
+		const apiURI = "https://kitchendisplaysystem.herokuapp.com";
 		function getProducedProcuct(data, p1) {
 			p1.produced = 0;
 			return data.filter(function (data) {
