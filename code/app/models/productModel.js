@@ -1,11 +1,10 @@
 /**
- * Created by shoaib-ganjawala on 27/1/18.
+ * Created by shoaib-ganjawala on 30/1/18.
  */
 
 'use strict';
 
-const mongoose = require('mongoose');
-const ObjectId = mongoose.Schema.ObjectId;
+var mongoose = require('mongoose');
 
 var productSchema = mongoose.Schema({
 	productName: String,

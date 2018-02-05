@@ -1,5 +1,5 @@
 /**
- * Created by shoaib-ganjawala on 27/1/18.
+ * Created by shoaib-ganjawala on 30/1/18.
  */
 
 
@@ -9,13 +9,12 @@
 var kitchen = require('../models/kitchenModel');
 var product = require('../models/productModel').product;
 var order = require('../models/orderModel');
-const mongoose = require('mongoose');
 var _ = require('lodash');
 
 
 exports.createProduct = function (req, res) {
 	if (!req.body) {
-		res.status(400).send({message: "Data can not be empty."});
+		res.status(500).send({message: "Data can not be empty."});
 	}
 	
 	var productSchema = new product({
@@ -107,7 +106,7 @@ exports.getProduct = function (req, res) {
 
 exports.placeOrder = function (req, res, io) {
 	if (!req.body) {
-		res.status(400).send({message: "Model can not be empty."});
+		res.status(500).send({message: "Model can not be empty."});
 	}
 	
 	var start = new Date();

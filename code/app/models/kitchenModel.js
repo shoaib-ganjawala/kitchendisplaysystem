@@ -1,13 +1,12 @@
 /**
- * Created by shoaib-ganjawala on 27/1/18.
+ * Created by shoaib-ganjawala on 30/1/18.
  */
 
 'use strict';
 
 
-const mongoose = require('mongoose');
-const ObjectId = mongoose.Schema.ObjectId;
-const product = require('./productModel').productSchema;
+var mongoose = require('mongoose');
+var product = require('./productModel').productSchema;
 
 
 var kitchenSchema = mongoose.Schema({

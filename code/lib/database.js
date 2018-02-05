@@ -1,9 +1,9 @@
 /**
- * Created by shoaib-ganjawala on 17/1/18.
+ * Created by shoaib-ganjawala on 30/1/18.
  */
 
 var mongoose = require('mongoose');
-var dbConfig = require('../code/config/databaseConfig');
+var dbConfig = require('../config/databaseConfig');
 
 // configure the database
 mongoose.connect(dbConfig.url, {

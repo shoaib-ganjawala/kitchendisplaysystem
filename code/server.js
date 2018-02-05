@@ -1,22 +1,19 @@
+require('./lib/database');
 var express = require('express');
 var bodyParser = require('body-parser');
 var orderDone = require('./app/controllers/kitchenController').orderDone;
 var port = process.env.PORT || 3009;
 
-require('./lib/database');
-
 // create express app
 var app = express();
 
-var server  = require('http').createServer(app);
-var io      = require('socket.io').listen(server);
-// var io = require('socket.io')(server);
-io.on('connection', function(socket) {
-	console.log("A user is connected");
-	socket.on('status added',function(id){
-		console.log(id);
-		orderDone(id, function(res){
-			if(res){
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
+
+io.on('connection', function (socket) {
+	socket.on('OrderDone', function (id) {
+		orderDone(id, function (res) {
+			if (res) {
 				io.emit('refresh feed', res);
 			} else {
 				io.emit('error');
@@ -26,30 +23,20 @@ io.on('connection', function(socket) {
 });
 
 // parser requests of content-type - application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 
 // parser resquests of content-type application/json
 app.use(bodyParser.json());
 
-//setup oauth2 - currently only password and refreshToken grant type is supported.
-require('./lib/oauth').configure(app).registerErrorHandler();
-
-// define a simple route
-// app.get('/', function (req, res) {
-//   res.json({'message': "Welcome to EasyNote application."})
-// });
-
 // Require Notes routes
-require('./app/routes/kitchenRoute.js')(app, io);
+require('./app/routes/kitchenRoute')(app, io);
 
 // listen for resquests
 server.listen(port, function () {
-  console.log('server is running on port 3009');
+	console.log('server is running on port ' + port);
 });
 
 //app level error handling
-process.on('uncaughtException', function (er) {
-	console.error(er.stack);
+process.on('uncaughtException', function () {
 	process.exit(1)
 });
-

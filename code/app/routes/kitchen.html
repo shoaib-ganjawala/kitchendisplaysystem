@@ -81,7 +81,7 @@
 	app.controller('customersCtrl', function ($scope, $http) {
 		
 		$scope.quantity = 1;
-		
+		const apiURI = "http://localhost:3009";
 		function getProducedProcuct(data, p1) {
 			p1.produced = 0;
 			return data.filter(function (data) {
@@ -100,7 +100,7 @@
 		}
 		
 		$http({
-			url: 'https://kitchendisplaysystem.herokuapp.com/getKitchenData',
+			url: apiURI+'/getKitchenData',
 			method: 'GET'
 		}).then(function (res) {
 			if (!!res.data.data[0]) {
@@ -108,7 +108,7 @@
 				$scope.placeorder = $scope.product[0];
 			} else {
 				$http({
-					url: 'https://kitchendisplaysystem.herokuapp.com/getProduct',
+					url: apiURI+'/getProduct',
 					method: 'GET'
 				}).then(function (res) {
 					$scope.product = res.data;
@@ -120,7 +120,7 @@
 		
 		$scope.placeOrder = function (placeorder, quantity) {
 			$http({
-				url: 'https://kitchendisplaysystem.herokuapp.com/placeOrder',
+				url: apiURI+'/placeOrder',
 				method: "POST",
 				data: {
 					_id: $scope.placeorder._id,
@@ -134,7 +134,7 @@
 		
 		$scope.report = function () {
 			$http({
-				url: 'https://kitchendisplaysystem.herokuapp.com/getKitchenData',
+				url: apiURI+'/getKitchenData',
 				method: 'GET'
 			}).then(function (res) {
 				var result = res.data.data[0].order.filter(function (p1) {
@@ -157,12 +157,12 @@
 		};
 		
 		$scope.orderDone = function (id) {
-			socket.emit('status added', id);
+			socket.emit('OrderDone', id);
 		};
 		
 		$scope.doPrediction = function () {
 			$http({
-				url: 'https://kitchendisplaysystem.herokuapp.com/doPrediction',
+				url: apiURI+'/doPrediction',
 				method: "POST",
 				data: {'product': $scope.product}
 			}).then(function (response) {
@@ -175,6 +175,7 @@
 				$scope.kitchens = filterKitchenDataByStatus(data.order);
 			});
 		});
+		
 	});
 
 </script>
