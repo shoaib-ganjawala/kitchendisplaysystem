@@ -3,7 +3,7 @@
  */
 
 var mongoose = require('mongoose');
-var dbConfig = require('../config/databaseConfig');
+var dbConfig = require('../code/config/databaseConfig');
 
 // configure the database
 mongoose.connect(dbConfig.url, {
